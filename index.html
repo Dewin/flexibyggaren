@@ -86,15 +86,34 @@
 
         <!-- Visas när en bild har analyserats -->
         <div class="scan-result-box hidden" id="scanResultBox">
-          <div class="scan-canvas-wrap">
-            <canvas id="scannerCanvas"></canvas>
-            <div class="scan-overlay-badge" id="scanOverlayBadge">🔍 Bildanalys klar!</div>
+          <div class="scan-left-col">
+            <div class="scan-canvas-wrap">
+              <canvas id="scannerCanvas" title="Klicka i bilden för att markera en specialdel!"></canvas>
+              <div class="scan-overlay-badge" id="scanOverlayBadge">🔍 Räls-detektor klar!</div>
+            </div>
+
+            <!-- Tap-to-Tag: Klicka på en specialdel i fotot för att stämpla ut den! -->
+            <div class="tap-to-tag-bar">
+              <p class="tap-bar-title">
+                👆 <strong>Har du specialdelar i lådan/bilden?</strong> Välj en del nedan och <strong>tryck direkt på den i fotot</strong> (tryck på en nål igen för att ta bort):
+              </p>
+              <div class="stamp-btns-row" id="stampBtnsRow">
+                <button class="stamp-btn active" data-stamp="ySwitch" type="button">🔀 Y-växel</button>
+                <button class="stamp-btn" data-stamp="bridge" type="button">🌉 Fast Bro</button>
+                <button class="stamp-btn" data-stamp="supports" type="button">🏛️ 2× Bropelare</button>
+                <button class="stamp-btn" data-stamp="xCross" type="button">✖️ X-korsning</button>
+                <button class="stamp-btn" data-stamp="tunnel" type="button">⛰️ Tunnel</button>
+                <button class="stamp-btn" data-stamp="turntableLoop" type="button">🔄 Vändskiva/Ramp</button>
+                <button class="stamp-btn" data-stamp="track25" type="button">🛤️ +25 bitar räls</button>
+              </div>
+            </div>
           </div>
+
           <div class="scan-summary-panel">
             <h3>Hittades i bilden:</h3>
             <div class="scan-detected-chips" id="scanDetectedChips"></div>
             <p class="scan-hint">
-              💡 Du kan spara detta som ditt garage eller finjustera med <strong>+ / −</strong> nedan om någon del låg skymd!
+              💡 Räls-detektorn letar efter Flexi-Trax karakteristiska tvärslå-ränder (och ignorerar golv, stolar och lådor). Du kan också klicka ut specialdelar direkt i fotot eller justera med <strong>+ / −</strong> i garaget!
             </p>
             <div class="scan-apply-actions">
               <button class="btn btn-success" id="applyReplaceGarageBtn" type="button">
@@ -104,6 +123,28 @@
                 ➕ Lägg till i befintligt garage
               </button>
             </div>
+
+            <!-- Valfri Gemini Vision AI-djupanalys -->
+            <details class="ai-vision-details">
+              <summary>🤖 Vill du använda riktig AI-bildigenkänning (Gemini Vision)?</summary>
+              <div class="ai-vision-body">
+                <p>
+                  Klistra in en gratis <strong>Google Gemini API-nyckel</strong> (sparas endast i din telefon) så analyseras hela fotot med multimodal AI som ser både räls och specialdelar automatiskt:
+                </p>
+                <div class="ai-key-row">
+                  <input
+                    type="password"
+                    id="geminiApiKeyInput"
+                    placeholder="AIzaSy... (Gemini API-nyckel)"
+                    autocomplete="off"
+                  />
+                  <button class="btn btn-accent btn-sm" id="runGeminiVisionBtn" type="button">
+                    ✨ Kör AI-analys
+                  </button>
+                </div>
+                <p class="ai-status-msg" id="aiStatusMsg"></p>
+              </div>
+            </details>
           </div>
         </div>
       </div>

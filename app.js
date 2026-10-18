@@ -336,13 +336,15 @@ class FlexiApp {
   }
 
   bindScannerControls() {
+    this.activeStampType = 'ySwitch';
+
     const handleFileSelect = (file) => {
       if (!file) return;
       const reader = new FileReader();
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
-          this.runImageAnalysis(img);
+          this.runImageAnalysis(img, false);
         };
         img.src = e.target.result;
       };
@@ -361,13 +363,68 @@ class FlexiApp {
 
     document.getElementById('demoScanBtn').addEventListener('click', () => {
       const demoCanvas = window.flexiScanner.createDemoPhotoCanvas();
-      this.runImageAnalysis(demoCanvas);
+      this.runImageAnalysis(demoCanvas, true);
     });
+
+    // Stämpelknappar för Tap-to-Tag i fotot
+    document.querySelectorAll('#stampBtnsRow .stamp-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#stampBtnsRow .stamp-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.activeStampType = btn.getAttribute('data-stamp');
+        window.flexiAudio.playSnap(1.05);
+      });
+    });
+
+    // Klick direkt på fotot (Canvas) sätter ut eller tar bort en specialdels-nål!
+    const scannerCanvas = document.getElementById('scannerCanvas');
+    scannerCanvas.addEventListener('click', (e) => {
+      const rect = scannerCanvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const normX = (e.clientX - rect.left) / rect.width;
+      const normY = (e.clientY - rect.top) / rect.height;
+
+      window.flexiAudio.playSnap(1.18);
+      const updated = window.flexiScanner.handleCanvasTap(normX, normY, this.activeStampType, scannerCanvas);
+      this.updateScanResultUI(updated);
+    });
+
+    // Valfri Gemini Vision AI-analys
+    const savedKey = localStorage.getItem('flexi_gemini_key') || '';
+    const keyInput = document.getElementById('geminiApiKeyInput');
+    if (keyInput && savedKey) {
+      keyInput.value = savedKey;
+    }
+
+    const geminiBtn = document.getElementById('runGeminiVisionBtn');
+    if (geminiBtn) {
+      geminiBtn.addEventListener('click', async () => {
+        const key = (keyInput?.value || '').trim();
+        const statusEl = document.getElementById('aiStatusMsg');
+        if (!key) {
+          statusEl.textContent = '⚠️ Klistra in en Gemini API-nyckel först.';
+          return;
+        }
+        localStorage.setItem('flexi_gemini_key', key);
+        statusEl.textContent = '⏳ Analyserar bilden med Gemini Vision AI...';
+        geminiBtn.disabled = true;
+        try {
+          const aiResult = await window.flexiScanner.analyzeWithGeminiVision(key, scannerCanvas);
+          window.flexiAudio.playVictoryFanfare();
+          this.updateScanResultUI(aiResult, '🤖 AI-bildanalys klar!');
+          statusEl.textContent = '✅ Klar! AI har räknat räls och specialdelar i bilden.';
+        } catch (err) {
+          statusEl.textContent = '❌ ' + (err?.message || String(err));
+        } finally {
+          geminiBtn.disabled = false;
+        }
+      });
+    }
 
     document.getElementById('applyReplaceGarageBtn').addEventListener('click', () => {
       if (!this.lastScanResult) return;
       this.garage = {
-        tracks: this.lastScanResult.tracks,
+        tracks: Math.max(24, this.lastScanResult.tracks || 60),
         supports: this.lastScanResult.supports,
         bridge: this.lastScanResult.bridge,
         ySwitch: this.lastScanResult.ySwitch,
@@ -397,15 +454,24 @@ class FlexiApp {
     });
   }
 
-  runImageAnalysis(source) {
+  runImageAnalysis(source, isDemo = false) {
     window.flexiAudio.playScanSweep();
     const targetCanvas = document.getElementById('scannerCanvas');
-    const result = window.flexiScanner.analyzeImageSource(source, targetCanvas);
-    this.lastScanResult = result;
-
+    const result = window.flexiScanner.analyzeImageSource(source, targetCanvas, isDemo);
     document.getElementById('scanResultBox').classList.remove('hidden');
+    this.updateScanResultUI(result);
+
+    window.flexiAudio.speak(
+      `Bildanalys klar! Jag hittade ungefär ${result.tracks} rälsbitar, vilket är cirka ${result.cm} centimeter.`,
+      false,
+      350
+    );
+  }
+
+  updateScanResultUI(result, customBadgeText = null) {
+    this.lastScanResult = result;
     document.getElementById('scanOverlayBadge').textContent =
-      `🔍 Hittade ${result.objectCount} del-grupper i bilden!`;
+      customBadgeText || `🔍 Hittade ~${result.tracks} rälsbitar (${result.cm} cm)`;
 
     const chips = [
       `<span class="scan-chip">🛤️ ~${result.tracks} rälsbitar (ca ${result.cm} cm)</span>`
@@ -417,13 +483,18 @@ class FlexiApp {
     if (result.tunnel > 0) chips.push(`<span class="scan-chip">⛰️ ${result.tunnel} st Tunnel/Grotta</span>`);
     if (result.turntableLoop > 0) chips.push(`<span class="scan-chip">🔄 ${result.turntableLoop} st Vändskiva/Ramp</span>`);
 
-    document.getElementById('scanDetectedChips').innerHTML = chips.join('');
+    if (
+      result.supports === 0 &&
+      result.bridge === 0 &&
+      result.ySwitch === 0 &&
+      result.xCross === 0 &&
+      result.tunnel === 0 &&
+      result.turntableLoop === 0
+    ) {
+      chips.push(`<span class="scan-chip" style="opacity:0.75">🧩 0 specialdelar (tryck i bilden om du vill markera en!)</span>`);
+    }
 
-    window.flexiAudio.speak(
-      `Bildanalys klar! Jag hittade ungefär ${result.tracks} rälsbitar, vilket är cirka ${result.cm} centimeter.`,
-      false,
-      350
-    );
+    document.getElementById('scanDetectedChips').innerHTML = chips.join('');
   }
 
   // ==========================================================================
