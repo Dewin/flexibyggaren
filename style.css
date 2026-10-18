@@ -1,0 +1,1154 @@
+/* ============================================================================
+   FlexiByggaren - Designsystem (Playful Toy-Tech & LEGO-Manual Blueprint UI)
+   ============================================================================ */
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-elevated: #263449;
+  --bg-blueprint: #0b192c;
+  --border-subtle: rgba(148, 163, 184, 0.2);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+
+  --flexi-red: #ef4444;
+  --flexi-yellow: #facc15;
+  --flexi-blue: #3b82f6;
+  --flexi-green: #22c55e;
+  --flexi-orange: #f97316;
+  --flexi-purple: #a855f7;
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1e293b 0%, #0f172a 70%);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.45;
+  padding-bottom: 42px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(59, 130, 246, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  flex-wrap: wrap;
+}
+
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.garage-summary-pill {
+  background: rgba(59, 130, 246, 0.16);
+  color: #e0f2fe;
+  border: 1.5px solid rgba(59, 130, 246, 0.45);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.garage-summary-pill:hover {
+  background: rgba(59, 130, 246, 0.28);
+  transform: translateY(-1px);
+}
+
+.icon-toggle-btn {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-subtle);
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.icon-toggle-btn.active {
+  background: rgba(34, 197, 94, 0.18);
+  color: #dcfce7;
+  border-color: rgba(34, 197, 94, 0.55);
+}
+
+/* Main Navigation Tabs */
+.main-tabs {
+  max-width: 1140px;
+  margin: 14px auto 0;
+  padding: 0 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.tab-btn {
+  background: rgba(30, 41, 59, 0.85);
+  color: var(--text-muted);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 11px 10px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: all 0.18s ease;
+}
+
+.tab-btn:hover {
+  border-color: rgba(250, 204, 21, 0.45);
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border-color: #60a5fa;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+}
+
+.tab-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.76rem;
+}
+
+.tab-badge {
+  background: var(--flexi-yellow);
+  color: #0f172a;
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+/* Main Content Layout */
+.app-main {
+  max-width: 1140px;
+  margin: 14px auto 0;
+  padding: 0 14px;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.22s ease;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+}
+
+.card-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.eyebrow-badge {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.14);
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.card h2 {
+  font-size: 1.32rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.muted-text {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.14s ease, filter 0.14s ease, box-shadow 0.14s ease;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 5px 15px rgba(239, 68, 68, 0.35);
+}
+
+.btn-secondary {
+  background: #334155;
+  color: #f8fafc;
+  border: 1.5px solid rgba(148, 163, 184, 0.3);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #0f172a;
+  box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #052e16;
+}
+
+.btn-voice {
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  color: #082f49;
+}
+
+.btn-sm {
+  padding: 8px 13px;
+  font-size: 0.85rem;
+}
+
+.btn-large {
+  width: 100%;
+  padding: 15px 22px;
+  font-size: 1.06rem;
+}
+
+/* Camera & Scanner Section */
+.camera-btn-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.camera-upload-label {
+  flex: 1 1 200px;
+}
+
+.scan-result-box {
+  margin-top: 18px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 2px solid rgba(56, 189, 248, 0.45);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.scan-result-box.hidden {
+  display: none;
+}
+
+.scan-canvas-wrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #090d16;
+  border: 1.5px solid var(--border-subtle);
+}
+
+#scannerCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.scan-overlay-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(15, 23, 42, 0.88);
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.scan-summary-panel h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.scan-detected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.scan-chip {
+  background: rgba(59, 130, 246, 0.18);
+  border: 1.5px solid rgba(59, 130, 246, 0.45);
+  color: #f8fafc;
+  padding: 6px 11px;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.scan-hint {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.scan-apply-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Presets */
+.preset-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chip-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  border-color: var(--flexi-yellow);
+}
+
+/* Böjbar Standardräls Hero Counter */
+.track-counter-hero {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.95));
+  border: 2px solid rgba(250, 204, 21, 0.35);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.track-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.track-hero-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.track-colors-dots {
+  display: grid;
+  grid-template-columns: repeat(2, 14px);
+  gap: 4px;
+}
+
+.track-colors-dots .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  display: block;
+}
+
+.dot.red { background: var(--flexi-red); }
+.dot.yellow { background: var(--flexi-yellow); }
+.dot.blue { background: var(--flexi-blue); }
+.dot.green { background: var(--flexi-green); }
+
+.track-hero-title h3 {
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.track-hero-title p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.track-dual-readout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.readout-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.readout-val {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--flexi-yellow);
+}
+
+.readout-box.secondary .readout-val {
+  color: #38bdf8;
+}
+
+.readout-unit {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.readout-divider {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.track-slider-wrap {
+  margin: 12px 0 14px;
+}
+
+#garageTracksSlider {
+  width: 100%;
+  accent-color: var(--flexi-yellow);
+  height: 8px;
+  cursor: pointer;
+}
+
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+.quick-step-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.step-adjust-btn {
+  flex: 1 1 70px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 800;
+  border: 1.5px solid var(--border-subtle);
+  cursor: pointer;
+  color: var(--text-main);
+  background: #263449;
+}
+
+.step-adjust-btn.plus:hover {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: var(--flexi-green);
+}
+
+.step-adjust-btn.minus:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--flexi-red);
+}
+
+/* Special Parts Grid */
+.section-subtitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.special-parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.part-card {
+  background: var(--bg-card-elevated);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.part-card.has-items {
+  border-color: rgba(56, 189, 248, 0.6);
+  background: linear-gradient(160deg, #263449 0%, #1e3a5f 100%);
+}
+
+.part-card-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.part-svg-thumb {
+  width: 54px;
+  height: 54px;
+  border-radius: 11px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.part-info h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.part-info p {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.part-counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.counter-circle-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: #334155;
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.counter-circle-btn:hover {
+  background: #475569;
+}
+
+.part-count-num {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--flexi-yellow);
+}
+
+/* ============================================================================
+   FLIK 2: BANFÖRSLAG
+   ============================================================================ */
+.tracks-toolbar-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.tracks-toolbar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.category-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-subtle);
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.filter-chip.active {
+  background: rgba(250, 204, 21, 0.2);
+  color: var(--flexi-yellow);
+  border-color: var(--flexi-yellow);
+}
+
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+
+.track-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+
+.track-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.65);
+}
+
+.track-card.featured-maxi {
+  border-color: rgba(245, 158, 11, 0.75);
+  box-shadow: 0 8px 26px rgba(245, 158, 11, 0.18);
+}
+
+.track-preview-svg-wrap {
+  background: var(--bg-blueprint);
+  border-bottom: 1.5px solid var(--border-subtle);
+  position: relative;
+  height: 195px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-preview-svg-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.track-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.track-steps-count-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.88);
+  color: #e2e8f0;
+  border: 1px solid var(--border-subtle);
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.track-card-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.track-card-body h3 {
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+.track-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.track-stats-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stat-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 9px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* ============================================================================
+   FLIK 3: STEG-FÖR-STEG-RITNING (LEGO-MANUAL-VY)
+   ============================================================================ */
+.builder-header-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.builder-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.builder-difficulty-badge {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--flexi-yellow);
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.builder-meta-line {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.builder-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.step-pills-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.step-pill-btn {
+  background: #263449;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border-subtle);
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.step-pill-btn.done {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+.step-pill-btn.active {
+  background: var(--flexi-yellow);
+  color: #0f172a;
+  border-color: #fef08a;
+  transform: scale(1.04);
+}
+
+/* Builder Workspace Split */
+.builder-workspace {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.blueprint-card {
+  background: var(--bg-blueprint);
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  box-shadow: inset 0 0 40px rgba(2, 132, 199, 0.15);
+}
+
+.blueprint-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.blueprint-scale-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  background: rgba(2, 132, 199, 0.2);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.blueprint-view-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.mini-tool-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid var(--border-subtle);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mini-tool-btn.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.blueprint-svg-container {
+  width: 100%;
+  aspect-ratio: 800 / 520;
+  background: #071120;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.blueprint-svg-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.blueprint-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.legend-dot.active-step {
+  background: var(--flexi-yellow);
+  box-shadow: 0 0 8px var(--flexi-yellow);
+}
+
+.legend-dot.built-step {
+  background: var(--flexi-green);
+}
+
+.legend-dot.floor2-step {
+  background: var(--flexi-orange);
+}
+
+/* LEGO Step Instruction Card */
+.step-instruction-card {
+  background: var(--bg-card);
+  border: 2px solid rgba(250, 204, 21, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lego-step-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lego-step-number-badge {
+  background: var(--flexi-yellow);
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 900;
+  padding: 5px 12px;
+  border-radius: 8px;
+  letter-spacing: 0.03em;
+}
+
+.step-floor-pill {
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+}
+
+.step-floor-pill.floor-2 {
+  background: rgba(249, 115, 22, 0.22);
+  color: #fdba74;
+  border: 1px solid rgba(249, 115, 22, 0.5);
+}
+
+.step-title-heading {
+  font-size: 1.26rem;
+  font-weight: 900;
+}
+
+.step-shape-subtitle {
+  font-size: 0.86rem;
+  color: #38bdf8;
+  font-weight: 700;
+  margin-top: -8px;
+}
+
+.lego-parts-needed-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.lego-box-header {
+  background: rgba(56, 189, 248, 0.18);
+  padding: 7px 12px;
+  font-size: 0.76rem;
+  font-weight: 900;
+  color: #bae6fd;
+  letter-spacing: 0.04em;
+}
+
+.lego-parts-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lego-part-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+}
+
+.lego-part-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lego-part-icon {
+  font-size: 1.55rem;
+}
+
+.lego-part-title {
+  font-size: 0.96rem;
+  font-weight: 800;
+}
+
+.lego-part-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.lego-part-badge {
+  background: var(--flexi-yellow);
+  color: #0f172a;
+  font-weight: 900;
+  font-size: 0.88rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.step-text-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step-main-instruction {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: #f1f5f9;
+}
+
+.step-tip-callout {
+  background: rgba(250, 204, 21, 0.12);
+  border-left: 4px solid var(--flexi-yellow);
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  color: #fef08a;
+}
+
+.step-nav-controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1.2fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Pulsating highlight for active blueprint step */
+@keyframes pulseStepGlow {
+  0%, 100% {
+    stroke-opacity: 0.95;
+    stroke-width: 26px;
+  }
+  50% {
+    stroke-opacity: 0.45;
+    stroke-width: 34px;
+  }
+}
+
+.svg-active-glow {
+  animation: pulseStepGlow 1.6s infinite ease-in-out;
+}
+
+/* Responsive Mobile Adjustments */
+@media (max-width: 880px) {
+  .scan-result-box,
+  .builder-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-sub,
+  .toggle-label {
+    display: none;
+  }
+
+  .tab-btn {
+    font-size: 0.8rem;
+    padding: 9px 6px;
+  }
+}

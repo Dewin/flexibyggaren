@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>FlexiByggaren 🚙🛤️ – Banförslag & Steg-för-steg-ritningar</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Topp-header -->
+  <header class="app-header">
+    <div class="brand-wrap" id="brandHomeBtn" title="Gå till Mitt Garage">
+      <img src="icon-192.png" alt="FlexiByggaren" class="brand-logo" />
+      <div>
+        <h1 class="brand-title">FlexiByggaren <span class="brand-car">🚙</span></h1>
+        <p class="brand-sub">Fota dina delar • Steg-för-steg-ritningar</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="garage-summary-pill" id="headerGarageBtn" type="button" title="Klicka för att ändra dina delar">
+        <span id="headerGarageText">🛤️ 120 bitar (270 cm)</span>
+      </button>
+      <button class="icon-toggle-btn active" id="toggleVoiceBtn" type="button" title="Svensk röstuppläsning På/Av">
+        🗣️ <span class="toggle-label">Röst</span>
+      </button>
+      <button class="icon-toggle-btn active" id="toggleSoundBtn" type="button" title="Ljudeffekter På/Av">
+        🔊 <span class="toggle-label">Ljud</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Huvudnavigering (3 steg) -->
+  <nav class="main-tabs" aria-label="Huvudmeny">
+    <button class="tab-btn active" data-tab="garage" type="button">
+      <span class="tab-step-num">1</span>
+      <span>📸 Fota &amp; Garage</span>
+    </button>
+    <button class="tab-btn" data-tab="tracks" type="button">
+      <span class="tab-step-num">2</span>
+      <span>🗺️ Banförslag</span>
+      <span class="tab-badge" id="trackCountBadge">6</span>
+    </button>
+    <button class="tab-btn" data-tab="builder" type="button">
+      <span class="tab-step-num">3</span>
+      <span>📐 Steg-för-Steg</span>
+    </button>
+  </nav>
+
+  <main class="app-main">
+    <!-- ================================================================== -->
+    <!-- FLIK 1: FOTA DELAR & MITT GARAGE                                   -->
+    <!-- ================================================================== -->
+    <section class="tab-panel active" id="panel-garage">
+      <!-- Kamera / Bildanalys-kort -->
+      <div class="card scanner-card">
+        <div class="card-header-row">
+          <div>
+            <span class="eyebrow-badge">📸 100% Lokal Bildscanner</span>
+            <h2>Ta kort på dina Flexi-Trax-delar</h2>
+            <p class="muted-text">
+              Lägg ut dina räls-ormar och specialdelar på golvet eller bordet och ta en bild. Appen analyserar färger och former direkt i webbläsaren!
+            </p>
+          </div>
+        </div>
+
+        <div class="camera-btn-row">
+          <label class="btn btn-primary camera-upload-label">
+            📷 Ta kort med kameran
+            <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden />
+          </label>
+          <label class="btn btn-secondary camera-upload-label">
+            🖼️ Välj foto från album
+            <input type="file" id="galleryInput" accept="image/*" hidden />
+          </label>
+          <button class="btn btn-accent" id="demoScanBtn" type="button">
+            🧪 Testa med demobild
+          </button>
+        </div>
+
+        <!-- Visas när en bild har analyserats -->
+        <div class="scan-result-box hidden" id="scanResultBox">
+          <div class="scan-canvas-wrap">
+            <canvas id="scannerCanvas"></canvas>
+            <div class="scan-overlay-badge" id="scanOverlayBadge">🔍 Bildanalys klar!</div>
+          </div>
+          <div class="scan-summary-panel">
+            <h3>Hittades i bilden:</h3>
+            <div class="scan-detected-chips" id="scanDetectedChips"></div>
+            <p class="scan-hint">
+              💡 Du kan spara detta som ditt garage eller finjustera med <strong>+ / −</strong> nedan om någon del låg skymd!
+            </p>
+            <div class="scan-apply-actions">
+              <button class="btn btn-success" id="applyReplaceGarageBtn" type="button">
+                ✅ Sätt som Mitt Garage
+              </button>
+              <button class="btn btn-secondary" id="applyAddGarageBtn" type="button">
+                ➕ Lägg till i befintligt garage
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mitt Garage: Böjbar Räls + Specialdelar -->
+      <div class="card garage-card">
+        <div class="card-header-row">
+          <div>
+            <span class="eyebrow-badge">🧰 Sparas automatiskt i telefonen</span>
+            <h2>Mitt Garage – Dina delar hemma</h2>
+            <p class="muted-text">
+              Justera enkelt antalet bitar eller specialdelar. Alla banförslag och steg-för-steg-ritningar anpassas direkt!
+            </p>
+          </div>
+          <div class="preset-row">
+            <button class="chip-btn" data-preset="small" type="button">🌱 Litet set</button>
+            <button class="chip-btn" data-preset="medium" type="button">🚙 Mellanset</button>
+            <button class="chip-btn" data-preset="mega" type="button">🏰 Stora lådan</button>
+          </div>
+        </div>
+
+        <!-- Böjbar standardräls (visar BÅDE antal bitar och ca cm/m) -->
+        <div class="track-counter-hero">
+          <div class="track-hero-top">
+            <div class="track-hero-title">
+              <span class="track-colors-dots">
+                <i class="dot red"></i>
+                <i class="dot yellow"></i>
+                <i class="dot blue"></i>
+                <i class="dot green"></i>
+              </span>
+              <div>
+                <h3>Böjbar Standardräls</h3>
+                <p>Röda, gula, blå &amp; gröna plastlänkar (1 bit ≈ 2,25 cm)</p>
+              </div>
+            </div>
+
+            <div class="track-dual-readout">
+              <div class="readout-box primary">
+                <span class="readout-val" id="garageTracksVal">120</span>
+                <span class="readout-unit">bitar / länkar</span>
+              </div>
+              <div class="readout-divider">≈</div>
+              <div class="readout-box secondary">
+                <span class="readout-val" id="garageCmVal">270 cm</span>
+                <span class="readout-unit" id="garageMeterVal">(2,70 meter räls)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="track-slider-wrap">
+            <input
+              type="range"
+              id="garageTracksSlider"
+              min="32"
+              max="420"
+              step="2"
+              value="120"
+              aria-label="Antal rälsbitar"
+            />
+            <div class="slider-marks">
+              <span>40 bitar (90 cm)</span>
+              <span>120 bitar (2,7 m)</span>
+              <span>240 bitar (5,4 m)</span>
+              <span>400 bitar (9,0 m)</span>
+            </div>
+          </div>
+
+          <div class="quick-step-btns">
+            <button class="step-adjust-btn minus" data-track-delta="-20" type="button">−20 bitar (−45 cm)</button>
+            <button class="step-adjust-btn minus" data-track-delta="-5" type="button">−5</button>
+            <button class="step-adjust-btn minus" data-track-delta="-1" type="button">−1</button>
+            <button class="step-adjust-btn plus" data-track-delta="1" type="button">+1</button>
+            <button class="step-adjust-btn plus" data-track-delta="5" type="button">+5</button>
+            <button class="step-adjust-btn plus" data-track-delta="20" type="button">+20 bitar (+45 cm)</button>
+          </div>
+        </div>
+
+        <!-- Specialdelar-rutnät -->
+        <h3 class="section-subtitle">🧩 Specialdelar &amp; Tillbehör</h3>
+        <div class="special-parts-grid" id="specialPartsGrid">
+          <!-- Renderas dynamiskt med tydliga SVG-ikoner i app.js -->
+        </div>
+
+        <div class="garage-bottom-cta">
+          <button class="btn btn-large btn-primary" id="goToTracksCtaBtn" type="button">
+            🗺️ Visa banor vi kan bygga med våra delar! ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- FLIK 2: BANFÖRSLAG                                                 -->
+    <!-- ================================================================== -->
+    <section class="tab-panel" id="panel-tracks">
+      <div class="tracks-toolbar-card">
+        <div class="tracks-toolbar-top">
+          <div>
+            <h2>Banförslag för ditt garage</h2>
+            <p class="muted-text" id="tracksInventorySummary">
+              Anpassade för 120 rälsbitar (ca 270 cm) och dina specialdelar.
+            </p>
+          </div>
+          <button class="btn btn-accent btn-random-track" id="randomTrackBtn" type="button">
+            🎲 Slumpa en helt ny bana!
+          </button>
+        </div>
+
+        <div class="category-filters" id="categoryFilters">
+          <button class="filter-chip active" data-filter="all" type="button">Alla banor</button>
+          <button class="filter-chip" data-filter="maxi" type="button">🏆 Använd ALLA delar</button>
+          <button class="filter-chip" data-filter="easy" type="button">🟢 Lätt &amp; Snabb</button>
+          <button class="filter-chip" data-filter="bridge" type="button">🌉 Bro &amp; Tunnel</button>
+          <button class="filter-chip" data-filter="switch" type="button">🔀 Växlar &amp; Kurvor</button>
+        </div>
+      </div>
+
+      <div class="tracks-grid" id="tracksGrid">
+        <!-- Ban-kort med SVG-förhandsgranskning renderas här -->
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- FLIK 3: STEG-FÖR-STEG-RITNING (LEGO-MANUAL-VY)                     -->
+    <!-- ================================================================== -->
+    <section class="tab-panel" id="panel-builder">
+      <!-- Övre kontrollrad för vald bana -->
+      <div class="builder-header-card">
+        <div class="builder-title-row">
+          <div>
+            <span class="builder-difficulty-badge" id="builderDifficultyBadge">Familjefavorit ⭐</span>
+            <h2 id="builderTrackName">🏆 Stora Mega-Banan</h2>
+            <p class="builder-meta-line" id="builderMetaLine">
+              🛤️ 120 bitar (ca 270 cm) • 📏 Golvyta: ca 140 × 95 cm
+            </p>
+          </div>
+
+          <div class="builder-header-actions">
+            <button class="btn btn-secondary btn-sm" id="backToTracksBtn" type="button">
+              ⬅️ Byt bana
+            </button>
+            <button class="btn btn-accent btn-sm" id="testDriveBtn" type="button">
+              🚙 Testkör bilen!
+            </button>
+          </div>
+        </div>
+
+        <!-- Klickbara steg-piller (Steg 1 .. N + Hela banan) -->
+        <div class="step-pills-bar" id="stepPillsBar"></div>
+      </div>
+
+      <!-- Huvudlayout för Steg-för-steg: Vänster/Topp = Interaktiv SVG-ritning, Höger/Botten = LEGO-delruta & instruktion -->
+      <div class="builder-workspace">
+        <!-- Interaktiv Ritnings-Canvas (SVG) -->
+        <div class="blueprint-card">
+          <div class="blueprint-toolbar">
+            <span class="blueprint-scale-pill" id="blueprintScalePill">
+              📏 Rutnät: 1 ruta = 20 × 20 cm på golvet
+            </span>
+            <div class="blueprint-view-btns">
+              <button class="mini-tool-btn active" id="toggleGhostStepsBtn" type="button" title="Visa kommande steg som streckade linjer">
+                👻 Spöklinjer: På
+              </button>
+              <button class="mini-tool-btn" id="overviewAllStepsBtn" type="button" title="Visa hela färdiga banan">
+                🏁 Visa hela banan
+              </button>
+            </div>
+          </div>
+
+          <div class="blueprint-svg-container" id="blueprintSvgContainer">
+            <!-- SVG-ritningen renderas här i app.js -->
+          </div>
+
+          <div class="blueprint-legend">
+            <span><i class="legend-dot active-step"></i> Byggs i detta steg (A ➔ B)</span>
+            <span><i class="legend-dot built-step"></i> Redan byggd räls</span>
+            <span><i class="legend-dot floor2-step"></i> 🌉 Våning 2 (På bropelare)</span>
+          </div>
+        </div>
+
+        <!-- LEGO-Manual Steg-kort ("Plocka fram dessa delar nu") -->
+        <div class="step-instruction-card" id="stepInstructionCard">
+          <div class="lego-step-banner">
+            <div class="lego-step-number-badge" id="stepNumberBadge">STEG 1 AV 7</div>
+            <span class="step-floor-pill" id="stepFloorPill">🟢 Våning 1 (På golvet)</span>
+          </div>
+
+          <h3 class="step-title-heading" id="stepTitleHeading">Startrakan &amp; Utgången</h3>
+          <p class="step-shape-subtitle" id="stepShapeSubtitle">Form: Raksträcka + mjuk startkurva</p>
+
+          <!-- LEGO-stil "Plocka fram dessa delar"-box -->
+          <div class="lego-parts-needed-box">
+            <div class="lego-box-header">
+              <span>🧱 PLOCKA FRAM TILL DETTA STEG:</span>
+            </div>
+
+            <div class="lego-parts-list" id="stepPartsNeededList">
+              <!-- Visar exakt antal bitar + cm + specialdelar för aktuellt steg -->
+            </div>
+          </div>
+
+          <!-- Steg-instruktionstext -->
+          <div class="step-text-box">
+            <p class="step-main-instruction" id="stepMainInstruction"></p>
+            <div class="step-tip-callout" id="stepTipCallout"></div>
+          </div>
+
+          <!-- Stora tydliga steg-knappar -->
+          <div class="step-nav-controls">
+            <button class="btn btn-secondary step-nav-btn" id="prevStepBtn" type="button">
+              ⬅️ Föregående
+            </button>
+            <button class="btn btn-voice step-nav-btn" id="speakStepBtn" type="button" title="Läs upp steget på svenska">
+              🔊 Läs upp
+            </button>
+            <button class="btn btn-primary step-nav-btn" id="nextStepBtn" type="button">
+              Nästa steg ➡️
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="audio.js"></script>
+  <script src="scanner.js"></script>
+  <script src="tracks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
